@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'junit:junit:4.13.1'
     testImplementation 'com.codeborne:selenide:6.11.1'
     implementation 'org.selenide:selenide-selenoid:2.3.5'
     implementation 'io.qameta.allure:allure-junit5:2.21.0'
