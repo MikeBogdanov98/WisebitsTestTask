@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 abstract public class BaseTest {
     private final String browserType = System.getenv("BROWSER_TYPE");
 
+    //Чтобы выбрать браузер отличный от Хрома, нужно в Конфигурации к рану проставить переменную BROWSER_TYPE=firefox/edge
     public void setUpBrowser(){
         switch (browserType == null ? "" : browserType){
             case "firefox":

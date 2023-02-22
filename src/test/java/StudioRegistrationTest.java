@@ -31,7 +31,7 @@ public class StudioRegistrationTest extends BaseTest{
 
         //Проверяем, что перешли на второй этап, проходим второй этап регистрации
         registrationStepAgreementPage.waitStepAgreement();
-        assertEquals("1", registrationStepAgreementPage.getNumberOfActiveStep());
+        assertEquals("2", registrationStepAgreementPage.getNumberOfActiveStep());
         RegistrationStepVerificationPage registrationStepVerificationPage
                 = registrationStepAgreementPage.confirmAgreementStep();
 
