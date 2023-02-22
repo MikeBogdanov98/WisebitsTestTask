@@ -15,6 +15,12 @@ public class MainPage {
         Selenide.open(url);
     }
 
+    public RegistrationStepDetailsPage successfulRegistration(String name, String email, String password){
+        fillInValidDataForRegistration(name, email, password);
+        clickOnCreateAccount();
+        return new RegistrationStepDetailsPage();
+    }
+
     public void fillInValidDataForRegistration(String name, String email, String password){
         inUsername.setValue(name);
         inEmail.setValue(email);

@@ -1,53 +1,57 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import res.Constants;
-import res.MainPage;
-import res.RegistrationStepsPage;
-import res.SuccessRegistrationPage;
+import res.*;
 import wrappers.CommonWrapper;
 
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class StudioRegistrationTest extends BaseTest{
     @Test
-    public void checkFullProcessOfRegistration(){
+    public void checkFullProcessOfRegistration() throws IOException {
+        //Запоминаем почту
         final String email = CommonWrapper.getRandomStringOfLettersAndDigits(10) + "@gmail.com";
+        //Заходим на сайт
         MainPage mainPage = new MainPage(Constants.siteLink);
-        mainPage.fillInValidDataForRegistration(
+
+        //На главной заполняем поля и переходим на следующую страницу
+        RegistrationStepDetailsPage registrationStepDetailsPage = mainPage.successfulRegistration(
                 CommonWrapper.getRandomStringOfLettersAndDigits(10),
                 email,
                 CommonWrapper.getRandomStringOfLettersAndDigits(6));
-        mainPage.clickOnCreateAccount();
-        RegistrationStepsPage registrationStepsPage = new RegistrationStepsPage();
-        registrationStepsPage.chooseBusinessAccountType();
-        registrationStepsPage.fillInValidMandatoryDataForRegistration();
-        registrationStepsPage.clickSubmit();
-        registrationStepsPage.acceptAgreement();
-        assertTrue(Objects.equals(registrationStepsPage.getNumberOfActiveStep(), "2"));
-        //Assert.assertTrue(registrationStepsPage.getNumberOfActiveStep(), Objects.equals(registrationStepsPage.getNumberOfActiveStep(), "2"));
-        registrationStepsPage.clickSubmit();
-        registrationStepsPage.uploadPassport();
-        assertTrue(Objects.equals(registrationStepsPage.getNumberOfActiveStep(), "3"));
-        //Assert.assertTrue(registrationStepsPage.getNumberOfActiveStep(), Objects.equals(registrationStepsPage.getNumberOfActiveStep(), "3"));
-        registrationStepsPage.uploadCommercialRegisterExtract();
-        registrationStepsPage.uploadCertificateOfIncorporation();
-        registrationStepsPage.clickSubmit();
-        //add waiting
-        registrationStepsPage.fillInValidDataInModalWindow();
-        registrationStepsPage.selectAllCheckboxes();
-        registrationStepsPage.clickSubmitSecond();
-        SuccessRegistrationPage successRegistrationPage = new SuccessRegistrationPage();
-        assertTrue(successRegistrationPage.isSuccessRegistrationTitleDisplayed());
-        //Assert.assertTrue(successRegistrationPage.isSuccessRegistrationTitleDisplayed());
-        assertTrue(Objects.equals(successRegistrationPage.getEmailOfSuccessRegistration(), email.toLowerCase()));
-        //Assert.assertTrue(Objects.equals(successRegistrationPage.getEmailOfSuccessRegistration(), email.toLowerCase()));
 
+        //Заполняем все поля первого этапа регистрации
+        RegistrationStepAgreementPage registrationStepAgreementPage
+                = registrationStepDetailsPage.fillInDetailsOfBusinessAccount();
+
+        //Проверяем, что перешли на второй этап, проходим второй этап регистрации
+        registrationStepAgreementPage.waitStepAgreement();
+        assertEquals("1", registrationStepAgreementPage.getNumberOfActiveStep());
+        RegistrationStepVerificationPage registrationStepVerificationPage
+                = registrationStepAgreementPage.confirmAgreementStep();
+
+        //Проверяем, что перешли на третий этап, проходим третий этап регистрации, переходим на модальное окно
+        File insertFile = CommonWrapper.createFile("example.pdf", 1000000);
+        registrationStepVerificationPage.waitStepVerification();
+        assertEquals("3", registrationStepVerificationPage.getNumberOfActiveStep());
+        ConfirmationWindowRegistrationPage confirmationWindowRegistrationPage
+                = registrationStepVerificationPage.uploadMandatoryFilesAndConfirm(insertFile);
+
+        //Заполняем модльное окно и переходим на страницу успешной регистрации
+        SuccessRegistrationPage successRegistrationPage
+                = confirmationWindowRegistrationPage.fillInAndConfirmRegistrationWindow();
+
+        //Проверяем, что успешно зарегистрировались
+        assertTrue(successRegistrationPage.isSuccessRegistrationTitleDisplayed());
+        assertEquals(successRegistrationPage.getEmailOfSuccessRegistration(), email.toLowerCase());
     }
 
+    //Для проверки успешности внедрения параллельного запуска
     @Test
     public void checkParallelTesting(){
         final String email = CommonWrapper.getRandomStringOfLettersAndDigits(10) + "@gmail.com";
@@ -57,6 +61,5 @@ public class StudioRegistrationTest extends BaseTest{
                 email,
                 CommonWrapper.getRandomStringOfLettersAndDigits(6));
         mainPage.clickOnCreateAccount();
-
     }
 }

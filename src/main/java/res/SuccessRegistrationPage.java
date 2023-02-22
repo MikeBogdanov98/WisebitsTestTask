@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class SuccessRegistrationPage {
     private final SelenideElement txPageTitle = $x(".//div[@id='wizard-page-title']");
-    private final SelenideElement txMessage = $x(".//strong");
+    private final SelenideElement txEmailMessage = $x(".//strong");
 
     public boolean isSuccessRegistrationTitleDisplayed(){
         txPageTitle.shouldBe(Condition.visible);
@@ -15,6 +15,6 @@ public class SuccessRegistrationPage {
     }
 
     public String getEmailOfSuccessRegistration(){
-        return txMessage.getText();
+        return txEmailMessage.getText();
     }
 }

@@ -1,5 +1,9 @@
 package wrappers;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
 public class CommonWrapper {
     public static String getRandomStringOfLettersAndDigits(int length) {
         String result = "";
@@ -33,4 +37,13 @@ public class CommonWrapper {
         return (int) (Math.random() * (to - from + 1) + from);
     }
 
+    public static File createFile(final String filename, final long sizeInBytes) throws IOException {
+        File file = new File(filename);
+        file.createNewFile();
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        raf.setLength(sizeInBytes);
+        raf.close();
+
+        return file;
+    }
 }

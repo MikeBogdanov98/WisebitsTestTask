@@ -1,11 +1,8 @@
-import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import res.Constants;
 
 abstract public class BaseTest {
     private final String browserType = System.getenv("BROWSER_TYPE");
@@ -26,7 +23,7 @@ abstract public class BaseTest {
         }
         Configuration.driverManagerEnabled = true;
         Configuration.browserSize = "1080x720";
-        Configuration.timeout = 20000;
+        //Configuration.timeout = 20000;
 
         //Configuration.headless = true;
     }
