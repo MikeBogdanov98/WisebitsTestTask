@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id'io.qameta.allure' version '2.9.6'
 }
 
 group 'org.example'
@@ -12,10 +13,14 @@ repositories {
 dependencies {
     testImplementation 'com.codeborne:selenide:6.11.1'
     implementation 'org.selenide:selenide-selenoid:2.3.5'
-    implementation 'io.qameta.allure:allure-junit5:2.21.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'io.github.bonigarcia:webdrivermanager:5.3.2'
+    testImplementation 'org.aspectj:aspectjweaver:1.9.7'
+    testImplementation 'io.qameta.allure:allure-junit5:2.7.0'
+    //testImplementation 'io.qameta.allure:allure-assertj:2.7.0'
+    testImplementation 'io.qameta.allure:allure-java-commons:2.7.0'
+
 }
 
 test {

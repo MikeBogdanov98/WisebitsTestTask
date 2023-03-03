@@ -1,44 +1,43 @@
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import pojo.BusinessAccount;
+import pojo.User;
 import res.*;
 import wrappers.CommonWrapper;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @Execution(ExecutionMode.CONCURRENT)
 public class StudioRegistrationTest extends BaseTest{
     @Test
     public void checkFullProcessOfRegistration() throws IOException {
-        //Запоминаем почту
-        final String email = CommonWrapper.getRandomStringOfLettersAndDigits(10) + "@gmail.com";
+        //Подготавливаем данные
+        final String email = RandomStringUtils.randomAlphanumeric(10) + "@gmail.com";
+        final User user = new User(RandomStringUtils.randomAlphanumeric(10),
+                email,
+                RandomStringUtils.randomAlphanumeric(6));
+        final File insertFile = CommonWrapper.createFile("example.pdf", 1000000);
+        final BusinessAccount businessAccount = new BusinessAccount();
+
         //Заходим на сайт
-        MainPage mainPage = new MainPage(Constants.siteLink);
+        MainPage mainPage = new MainPage();
 
         //На главной заполняем поля и переходим на следующую страницу
-        RegistrationStepDetailsPage registrationStepDetailsPage = mainPage.successfulRegistration(
-                CommonWrapper.getRandomStringOfLettersAndDigits(10),
-                email,
-                CommonWrapper.getRandomStringOfLettersAndDigits(6));
+        RegistrationStepDetailsPage registrationStepDetailsPage = mainPage.successfulRegistration(user);
 
         //Заполняем все поля первого этапа регистрации
         RegistrationStepAgreementPage registrationStepAgreementPage
-                = registrationStepDetailsPage.fillInDetailsOfBusinessAccount();
+                = registrationStepDetailsPage.fillInDetailsOfBusinessAccount(businessAccount);
 
         //Проверяем, что перешли на второй этап, проходим второй этап регистрации
         registrationStepAgreementPage.waitStepAgreement();
-        assertEquals("2", registrationStepAgreementPage.getNumberOfActiveStep());
         RegistrationStepVerificationPage registrationStepVerificationPage
                 = registrationStepAgreementPage.confirmAgreementStep();
 
         //Проверяем, что перешли на третий этап, проходим третий этап регистрации, переходим на модальное окно
-        File insertFile = CommonWrapper.createFile("example.pdf", 1000000);
-        registrationStepVerificationPage.waitStepVerification();
-        assertEquals("3", registrationStepVerificationPage.getNumberOfActiveStep());
         ConfirmationWindowRegistrationPage confirmationWindowRegistrationPage
                 = registrationStepVerificationPage.uploadMandatoryFilesAndConfirm(insertFile);
 
@@ -47,19 +46,19 @@ public class StudioRegistrationTest extends BaseTest{
                 = confirmationWindowRegistrationPage.fillInAndConfirmRegistrationWindow();
 
         //Проверяем, что успешно зарегистрировались
-        assertTrue(successRegistrationPage.isSuccessRegistrationTitleDisplayed());
-        assertEquals(successRegistrationPage.getEmailOfSuccessRegistration(), email.toLowerCase());
+        successRegistrationPage.isSuccessRegistrationTitleDisplayed();
+        successRegistrationPage.isEmailOfSuccessRegistrationEquals(email.toLowerCase());
     }
 
     //Для проверки успешности внедрения параллельного запуска
     @Test
     public void checkParallelTesting(){
-        final String email = CommonWrapper.getRandomStringOfLettersAndDigits(10) + "@gmail.com";
-        MainPage mainPage = new MainPage(Constants.siteLink);
-        mainPage.fillInValidDataForRegistration(
-                CommonWrapper.getRandomStringOfLettersAndDigits(10),
+        final String email = RandomStringUtils.randomAlphanumeric(10) + "@gmail.com";
+        final User user = new User(RandomStringUtils.randomAlphanumeric(10),
                 email,
-                CommonWrapper.getRandomStringOfLettersAndDigits(6));
+                RandomStringUtils.randomAlphanumeric(6));
+        MainPage mainPage = new MainPage();
+        mainPage.fillInValidDataForRegistration(user);
         mainPage.clickOnCreateAccount();
     }
 }

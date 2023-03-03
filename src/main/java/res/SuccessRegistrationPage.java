@@ -5,16 +5,19 @@ import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$x;
 
-public class SuccessRegistrationPage {
+public class SuccessRegistrationPage extends RegistrationPage{
     private final SelenideElement txPageTitle = $x(".//div[@id='wizard-page-title']");
     private final SelenideElement txEmailMessage = $x(".//strong");
 
-    public boolean isSuccessRegistrationTitleDisplayed(){
-        txPageTitle.shouldBe(Condition.visible);
-        return txPageTitle.isDisplayed();
+    public SuccessRegistrationPage(){
+        txNumberOfActiveStep.shouldNot(Condition.exist);
     }
 
-    public String getEmailOfSuccessRegistration(){
-        return txEmailMessage.getText();
+    public void isSuccessRegistrationTitleDisplayed(){
+        txPageTitle.shouldBe(Condition.visible);
+    }
+
+    public void isEmailOfSuccessRegistrationEquals(String val){
+        txEmailMessage.shouldHave(Condition.exactText(val));
     }
 }

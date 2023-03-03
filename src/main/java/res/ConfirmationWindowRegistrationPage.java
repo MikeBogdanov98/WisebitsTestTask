@@ -3,21 +3,29 @@ package res;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import wrappers.CommonWrapper;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Selenide.$$x;
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.*;
 
-public class ConfirmationWindowRegistrationPage extends  RegistrationStepPage{
+public class ConfirmationWindowRegistrationPage extends  RegistrationPage{
+    private final SelenideElement divModalAffidavit = $("#affidavit-modal");
     private final ElementsCollection cbsAgreements = $$x(".//div[@class='affidavit']//*[name()='svg']");
     private final SelenideElement inFullLegalName = $x(".//input[@name='fullLegalName']");
     private final SelenideElement inJobTitle = $x(".//input[@name='jobTitle']");
     private final SelenideElement inCompanyLegalName = $x(".//input[@name='companyLegalName']");
+    protected final SelenideElement btnSubmit = $("#affidavit-modal__ok");
+
+    public void clickSubmit(){
+        btnSubmit.click();
+    }
+
+    public ConfirmationWindowRegistrationPage(){
+        divModalAffidavit.shouldBe(Condition.visible, Duration.ofSeconds(25));
+    }
 
     public SuccessRegistrationPage fillInAndConfirmRegistrationWindow(){
-        waitRegistrationWindow();
         selectAllCheckboxes();
         fillInValidDataInModalWindow();
         clickSubmit();
@@ -31,12 +39,8 @@ public class ConfirmationWindowRegistrationPage extends  RegistrationStepPage{
     }
 
     public void fillInValidDataInModalWindow() {
-        inFullLegalName.setValue(CommonWrapper.getRandomStringOfLetters(10));
-        inJobTitle.setValue(CommonWrapper.getRandomStringOfLetters(10));
-        inCompanyLegalName.setValue(CommonWrapper.getRandomStringOfLetters(10));
-    }
-
-    public void waitRegistrationWindow(){
-        inFullLegalName.shouldBe(Condition.visible, Duration.ofSeconds(25));
+        inFullLegalName.setValue(RandomStringUtils.randomAlphabetic(10));
+        inJobTitle.setValue(RandomStringUtils.randomAlphabetic(10));
+        inCompanyLegalName.setValue(RandomStringUtils.randomAlphabetic(10));
     }
 }
