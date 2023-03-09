@@ -1,35 +1,30 @@
 # WisebitsTestTask
-## Автоматизировать следующий тест кейс:
-1. Открыть страницу https://studio.faphouse.com/
-2. Заполнить поля username, email, password любыми валидными данными
-3. Нажать Start earning money
-4. Выбрать Business account type, заполнить обязательные поля и нажать Next
-5. На втором шаге "Agreement": Проверить что в заголовке активен именно шаг 2; 
-согласиться с условиями, нажав на соответствующий чек-бокс и нажать Next
-6. На 3 шаге "Verification": Проверить, что в заголовке активен именно шаг 3; 
-загрузить документы для обязательных полей и нажать кнопку Finish 
-Registration.
-7. Появится модальное окно, где нужно проставить галочки во всех пунктах и
-заполнить обязательные поля, нажать submit кнопку.
-8. Проверить наличие заголовка "Complete registration on FapHouse" и то, что в
-сообщении о необходимости подтвердить почту указана именно та почта, 
-которую указали на шаге регистрации.
-- Предусмотреть возможность параллельного запуска тестов, 
-кроссбраузерное тестирование
-- Наличие Allure отчета
-- Готовое тестовое задание выложить на github
-Тестовое задание должно быть сделано на Java (8+) и с использованием
-фреймворка Selenide. Это из обязательного.
+## To automate the following test case:
+1. Open the page
+2. Fill in the fields username, email, and password with any valid data
+3. Click on Start earning money
+4. Choose Business account type, fill in mandatory fields, and click on Next
+5. On the second step "Agreement": Check that step 2 is active in the header;
+   agree with conditions, click on the checkbox, and click on Next
+6. On the third step "Verification": Check that step 2 is active in the header;
+   upload documents for mandatory fields and click on Finish
+   Registration.
+7. Modal window appears, where you need to choose all points and
+   fill in mandatory fields, and click on submit.
+8. Check the existence of the header "Complete registration" and
+   in the message, there is the same email as in the registration step.
 
-А так в работе мы используем Java 16, Selenide, Junit, Gradle, Allure. Не
-используем BDD фреймворки
+- Parallel run of tests, cross-browser testing
+- Existence of Allure report
+- Ready test task push on GitHub
+  Test tasks must be done on Java (8+) and using the framework Selenide.
 
-## Реализация
+We use Java 16, Selenide, Junit, Gradle, and Allure. Don't use BDD frameworks.
+
+## Realization
 Java 11, Selenide, Junit5, Gradle, Allure, WebDriverManager
 
-## Комментарии
-Впервые работал с Selenide, структура проекта не по канонам, но такой я её сделал на своё усмотрение.
+## Comments
+It was my first experience using Selenide, not canonical structure, but it was my decision.
 
-Реализовал отдельно параллельный запуск тестов и отдельно кроссбраузерное тестирование.
-
-Отчёты формируются только при наличии упавших тестов.
+Separately realized parallel run and separately cross-browser testing.
